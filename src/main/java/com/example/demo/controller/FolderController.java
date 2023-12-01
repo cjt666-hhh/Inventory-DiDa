@@ -32,7 +32,7 @@ public class FolderController {
     @DeleteMapping("/delete/{name}/{user_id}")
     public Result deleteFolder(@PathVariable("name") String name,@PathVariable("user_id") Integer userid){
 
-        Integer id=folderService.getFolderIdByName(name);
+        Integer id=folderService.getFolderIdByName(name,userid);
 
         folderService.deleteById(id,userid);
         tasksService.deleteByFolderId(id,userid);
@@ -47,6 +47,15 @@ public class FolderController {
         folderService.addFolder(folder);
 
         return Result.success();
+
+    }
+    @ApiOperation("查询文件夹")
+    @GetMapping("/select/{name}/{userid}")
+    public Result selectFolderByName(@PathVariable("name")String name,@PathVariable("userid")Integer userid){
+
+        Integer folderId=folderService.getFolderIdByName(name,userid);
+
+       return Result.success( tasksService.getByFolderId(folderId));
 
     }
 

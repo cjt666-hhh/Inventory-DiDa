@@ -26,7 +26,7 @@ public class SwaggerConfig {
         Contact contact = new Contact("陈竟镗", "http://xxx.xxx.com/联系人访问链接", "2021205608@qq.com");
         return new ApiInfo(
                 "陈竟镗最帅", // 标题
-                "陈竟镗学习配置Swagger", // 描述
+                "我测，晚上开会，我亲爱的swagger被我自己写的filter过滤器拦住了，吓得我一身冷汗", // 描述
                 "v1.0", // 版本
                 "http://terms.service.url/组织链接", // 组织链接
                 contact, // 联系人信息

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -52,6 +53,17 @@ public class Tasks implements Serializable {
     private Integer userId;//最重要，前端
 
     private Integer importance;//4，3，2，1（网页移动）优先级
+
+    @TableField("is_finish_on_time")
+    private int isFinishOnTime;
+
+    @TableField("finish_time")
+    private LocalDateTime finishTime;
+
+
+
+
+
 
 
 }

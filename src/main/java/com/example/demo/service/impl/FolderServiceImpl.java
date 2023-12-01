@@ -64,10 +64,10 @@ public class FolderServiceImpl extends ServiceImpl<FolderMapper, Folder> impleme
 
        return folderMapper.selectCount(queryWrapper);
     }
-    public Integer getFolderIdByName(String name){
+    public Integer getFolderIdByName(String name,Integer userid){
 
         QueryWrapper<Folder>queryWrapper=new QueryWrapper<Folder>()
-                .eq("name",name);
+                .eq("name",name).eq("user_id",userid);
 
         return folderMapper.selectOne(queryWrapper).getId();
     }

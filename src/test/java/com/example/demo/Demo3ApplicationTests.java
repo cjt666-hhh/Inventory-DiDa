@@ -11,9 +11,13 @@ import com.example.demo.service.impl.TbLoginServiceImpl;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.ParameterResolver;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -137,32 +141,18 @@ class Demo3ApplicationTests {
 
     }
 
+
     @Test
-    public void testModify(){
-        Tasks tasks=new Tasks();
-        tasks.setId(1);
-        tasks.setFolderId(3);
-        tasks.setIsDelete(0);
+    public void testGetByDate(){
 
 
-        tasksService.modifyFolder(tasks);
 
-    }
-    @Test
-    public void test(){
-
-
-        Tasks tasks=new Tasks();
-        tasks.setName("jjj");
-        tasks.setFolderId(2);
-        tasks.setCreateTime(LocalDateTime.now());
-        tasks.setUserId(2);
-        tasks.setImportance(4);
-        tasksService.addTask(tasks,"学校");
-
+        LocalDate dat=LocalDate.parse("2023-11-17");
+        System.out.println(tasksService.getByDate(dat,1));;
 
 
     }
+
 
 
 }

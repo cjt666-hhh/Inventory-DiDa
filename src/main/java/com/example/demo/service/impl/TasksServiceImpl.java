@@ -11,7 +11,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -80,9 +82,7 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
 
 
 
-    public void modifyFolder(Tasks tasks){
-        tasksMapper.updateById(tasks);
-    } //可以把特定备忘录扔垃圾桶里，
+
 
     public List<Tasks> groupBySignName(Integer userId ,String signName) {
         QueryWrapper queryWrapper = new QueryWrapper<Tasks>().eq("user_id", userId)
@@ -106,11 +106,12 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
 
     public void addTask(Tasks task,String folderName){
         task.setCreateTime(LocalDateTime.now());
+        Integer userid=task.getUserId();
 
 
         if (folderService.isFolderExit(task,folderName)){
 
-            task.setFolderId(folderService.getFolderIdByName(folderName));
+            task.setFolderId(folderService.getFolderIdByName(folderName,userid));
             tasksMapper.insert(task);
 
         }else{
@@ -124,5 +125,68 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
         }
 
     }
+
+    public List<Tasks>  getByTime(LocalDateTime first,LocalDateTime last, Integer userid){
+
+        QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().between("create_time",first,last)
+                .orderByAsc("create_time").eq("user_id",userid);
+
+
+        List<Tasks>tasksList=tasksMapper.selectList(queryWrapper);
+        return tasksList;
+    }
+    public List<Tasks> getByFolderId(Integer folderId){
+
+        QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().eq("folder_id",folderId)
+                .orderByAsc("create_time");
+
+        return tasksMapper.selectList(queryWrapper);
+
+    }
+    public  List<Tasks>getByDate(LocalDate date, Integer userid){
+        LocalDateTime starOfDay=date.atStartOfDay();
+        LocalDateTime endOfDay=date.atTime(LocalTime.MAX);
+
+        QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().between("create_time",starOfDay,endOfDay)
+                .eq("user_id",userid);
+        List<Tasks>tasksList=tasksMapper.selectList(queryWrapper);
+        return tasksList;
+
+    }
+    public long getCountByDate(LocalDate date, Integer userid){
+        LocalDateTime starOfDay=date.atStartOfDay();
+        LocalDateTime endOfDay=date.atTime(LocalTime.MAX);
+
+        QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().between("create_time",starOfDay,endOfDay)
+                .eq("user_id",userid);
+
+        return tasksMapper.selectCount(queryWrapper) ;}
+    public List<Tasks>getOnTime(String day,Integer userid){
+        LocalDate date=LocalDate.parse(day);
+        LocalDateTime atStart=date.atStartOfDay();
+        LocalDateTime deadLine=date.atTime(LocalTime.MAX);
+
+        QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().eq("user_id",userid)
+                .between("finish_time",atStart,deadLine).orderByAsc("finish_time");
+
+        List<Tasks>tasksList=tasksMapper.selectList(queryWrapper);
+
+        return tasksList;
+    }
+    public long getCountOnTime(String day,Integer userid){
+        LocalDate date=LocalDate.parse(day);
+        LocalDateTime atStart=date.atStartOfDay();
+        LocalDateTime deadLine=date.atTime(LocalTime.MAX);
+
+        QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().eq("user_id",userid)
+                .between("finish_time",atStart,deadLine).orderByAsc("finish_time");
+
+       return tasksMapper.selectCount(queryWrapper);
+
+
+    }
+
+
+
 
 }
