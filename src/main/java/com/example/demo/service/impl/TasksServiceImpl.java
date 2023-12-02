@@ -115,26 +115,21 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
             tasksMapper.insert(task);
 
         }else{
-            int i=(int)folderService.getCountOfFolders();
-            task.setFolderId(i+1);
+
+
+
+            task.setFolderId(folderService.getFolderIdMax().getId()+1);
             tasksMapper.insert(task);
             Folder folder=new Folder();
             folder.setName(folderName);
             folder.setUserId(task.getUserId());
             folderMapper.insert(folder);
+
         }
 
     }
 
-    public List<Tasks>  getByTime(LocalDateTime first,LocalDateTime last, Integer userid){
 
-        QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().between("create_time",first,last)
-                .orderByAsc("create_time").eq("user_id",userid);
-
-
-        List<Tasks>tasksList=tasksMapper.selectList(queryWrapper);
-        return tasksList;
-    }
     public List<Tasks> getByFolderId(Integer folderId){
 
         QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().eq("folder_id",folderId)
@@ -153,7 +148,8 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
         return tasksList;
 
     }
-    public long getCountByDate(LocalDate date, Integer userid){
+    public long getCountByDate(String day, Integer userid){
+        LocalDate date=LocalDate.parse(day);
         LocalDateTime starOfDay=date.atStartOfDay();
         LocalDateTime endOfDay=date.atTime(LocalTime.MAX);
 
@@ -185,6 +181,7 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
 
 
     }
+
 
 
 

@@ -5,6 +5,7 @@ import com.example.demo.entity.Tasks;
 import com.example.demo.entity.TbLogin;
 
 import com.example.demo.mapper.TasksMapper;
+import com.example.demo.pojo.Result;
 import com.example.demo.service.impl.FolderServiceImpl;
 import com.example.demo.service.impl.TasksServiceImpl;
 import com.example.demo.service.impl.TbLoginServiceImpl;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.extension.ParameterResolver;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -94,7 +97,8 @@ class Demo3ApplicationTests {
 
 
     }
-
+@Autowired
+TasksMapper tasksMapper;
     @Test
     public void testRegister(){
 
@@ -142,16 +146,20 @@ class Demo3ApplicationTests {
     }
 
 
+
     @Test
     public void testGetByDate(){
 
 
+        System.out.println( tasksService.getCountOnTime("2023-11-17",1)/tasksService.getCountByDate("2023-11-17",1));;
 
-        LocalDate dat=LocalDate.parse("2023-11-17");
-        System.out.println(tasksService.getByDate(dat,1));;
+
+
+
 
 
     }
+
 
 
 

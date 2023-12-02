@@ -4,6 +4,7 @@ package com.example.demo.controller;
 import com.example.demo.entity.Tasks;
 import com.example.demo.mapper.TasksMapper;
 import com.example.demo.pojo.Result;
+import com.example.demo.service.impl.FolderServiceImpl;
 import com.example.demo.service.impl.TasksServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,8 @@ public class TasksController {
 
     @Autowired
     TasksMapper tasksMapper;
+    @Autowired
+    FolderServiceImpl folderService;
 
     @ApiOperation("点击输入框的时候，输入关键字跳出所有信息,前端发用户输入的关键词给我")
     @GetMapping("/autoSearch/{name}/{user_id}")//
@@ -111,18 +114,30 @@ public class TasksController {
     public Result getCountByDate(@PathVariable("userid")Integer userid, @PathVariable("day")String day) {
 
 
-        LocalDate date=LocalDate.parse(day);
 
-        return  Result.success(tasksService.getCountByDate(date,userid));
+
+        return  Result.success(tasksService.getCountByDate(day,userid));
     }
     @ApiOperation("前端日期发过来，我返还当日完成率")
     @GetMapping("/finishRate/{userid}/{day}")
     public Result getFinishRateByDay(@PathVariable("userid")Integer userid,@PathVariable("day")String day){
 
-        LocalDate date=LocalDate.parse(day);
 
-        double finishRate=tasksService.getCountOnTime(day,userid)/tasksService.getCountByDate(date,userid);
+
+        double finishRate=tasksService.getCountOnTime(day,userid)/tasksService.getCountByDate(day,userid);
         return Result.success(finishRate);
+    }
+    @ApiOperation("前端把文件夹名和实体类发给我，我修改文件啊分类")
+    @PutMapping("/modifyFolder/{name}")
+    public Result modifyFolder(@RequestBody Tasks task,@PathVariable("name")String name){
+
+
+
+        Integer folderId= folderService.getFolderIdByName("学校",task.getUserId());
+
+        task.setFolderId(folderId);
+        tasksMapper.updateById(task);
+        return  Result.success();
     }
 
 

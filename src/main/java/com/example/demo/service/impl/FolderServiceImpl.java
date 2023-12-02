@@ -72,6 +72,25 @@ public class FolderServiceImpl extends ServiceImpl<FolderMapper, Folder> impleme
         return folderMapper.selectOne(queryWrapper).getId();
     }
 
+    public Folder getByNameAndUserid(Integer userid,String name){
+        QueryWrapper<Folder>queryWrapper= new QueryWrapper<Folder>()
+                .eq("user_id",userid).eq("name",name);
+
+        return  folderMapper.selectOne(queryWrapper);
+
+
+
+
+    }
+    public Folder getFolderIdMax(){
+        QueryWrapper<Folder>queryWrapper=new QueryWrapper<Folder>().select("id")
+                .orderByDesc("id").last("limit 1");
+
+        return folderMapper.selectOne(queryWrapper);
+
+
+    }
+
 
 
 }

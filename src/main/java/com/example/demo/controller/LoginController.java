@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,6 +48,7 @@ public class LoginController {
     @PostMapping("/userRegiser")
     public Result register(@RequestBody TbLogin tbLogin){
 
+        tbLogin.setCreateTime(LocalDateTime.now());
         tbLoginService.register(tbLogin);
 
         return  Result.success();
