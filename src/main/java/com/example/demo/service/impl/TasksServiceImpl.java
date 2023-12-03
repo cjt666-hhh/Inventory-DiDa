@@ -54,7 +54,8 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
 
         QueryWrapper<Tasks> wrapper = new QueryWrapper<Tasks>()
                 .like("name", namePart)
-                .orderByDesc("create_time").eq("user_id",userid);
+                .orderByDesc("create_time").eq("user_id",userid)
+                .eq("is_delete",0).eq("is_finished",0);
 
 
         return tasksMapper.selectList(wrapper);
@@ -109,7 +110,7 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
         Integer userid=task.getUserId();
 
 
-        if (folderService.isFolderExit(task,folderName)){
+        if (folderService.getByFolderNameAndUserid(userid,folderName)!=null){
 
             task.setFolderId(folderService.getFolderIdByName(folderName,userid));
             tasksMapper.insert(task);
@@ -133,7 +134,7 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
     public List<Tasks> getByFolderId(Integer folderId){
 
         QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().eq("folder_id",folderId)
-                .orderByAsc("create_time");
+                .orderByAsc("create_time").eq("is_delete",0);
 
         return tasksMapper.selectList(queryWrapper);
 
@@ -143,7 +144,7 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
         LocalDateTime endOfDay=date.atTime(LocalTime.MAX);
 
         QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().between("create_time",starOfDay,endOfDay)
-                .eq("user_id",userid);
+                .eq("user_id",userid).eq("is_delete",0);
         List<Tasks>tasksList=tasksMapper.selectList(queryWrapper);
         return tasksList;
 
@@ -154,7 +155,7 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
         LocalDateTime endOfDay=date.atTime(LocalTime.MAX);
 
         QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().between("create_time",starOfDay,endOfDay)
-                .eq("user_id",userid);
+                .eq("user_id",userid).eq("is_delete",0);
 
         return tasksMapper.selectCount(queryWrapper) ;}
     public List<Tasks>getOnTime(String day,Integer userid){
@@ -163,7 +164,8 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
         LocalDateTime deadLine=date.atTime(LocalTime.MAX);
 
         QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().eq("user_id",userid)
-                .between("finish_time",atStart,deadLine).orderByAsc("finish_time");
+                .between("finish_time",atStart,deadLine).orderByAsc("finish_time")
+                .eq("is_delete",0);
 
         List<Tasks>tasksList=tasksMapper.selectList(queryWrapper);
 
@@ -175,7 +177,7 @@ public class TasksServiceImpl extends ServiceImpl<TasksMapper, Tasks> implements
         LocalDateTime deadLine=date.atTime(LocalTime.MAX);
 
         QueryWrapper<Tasks>queryWrapper=new QueryWrapper<Tasks>().eq("user_id",userid)
-                .between("finish_time",atStart,deadLine).orderByAsc("finish_time");
+                .between("finish_time",atStart,deadLine).orderByAsc("finish_time").eq("is_delete",0);
 
        return tasksMapper.selectCount(queryWrapper);
 
