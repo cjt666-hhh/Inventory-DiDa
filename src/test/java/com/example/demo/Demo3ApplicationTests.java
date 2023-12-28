@@ -9,6 +9,8 @@ import com.example.demo.pojo.Result;
 import com.example.demo.service.impl.FolderServiceImpl;
 import com.example.demo.service.impl.TasksServiceImpl;
 import com.example.demo.service.impl.TbLoginServiceImpl;
+import com.example.demo.utils.JwtUtils;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.junit.jupiter.api.Test;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +36,6 @@ class Demo3ApplicationTests {
 
     @Test
     void contextLoads() {
-
 
 
     }
@@ -69,6 +71,7 @@ class Demo3ApplicationTests {
 
     @Autowired
     FolderServiceImpl folderService;
+
     @Test
     void testLogin() {
         System.out.println(tbLoginService.getByPasswordAndUserName("cjt666", "123456").toString());
@@ -92,17 +95,18 @@ class Demo3ApplicationTests {
     }
 
     @Test
-    public void testDelete(Integer folderId,Integer userId){
-
+    public void testDelete(Integer folderId, Integer userId) {
 
 
     }
-@Autowired
-TasksMapper tasksMapper;
-    @Test
-    public void testRegister(){
 
-        TbLogin tbLogin=new TbLogin();
+    @Autowired
+    TasksMapper tasksMapper;
+
+    @Test
+    public void testRegister() {
+
+        TbLogin tbLogin = new TbLogin();
         tbLogin.setName("糖糖糖");
         tbLogin.setPassword("12345567");
         tbLogin.setUsername("ccccc");
@@ -113,9 +117,9 @@ TasksMapper tasksMapper;
     }
 
     @Test
-    public void testAddFolder(){
+    public void testAddFolder() {
 
-        Folder folder=new Folder();
+        Folder folder = new Folder();
 
         folder.setName("学校");
         folder.setUserId(2);
@@ -123,44 +127,27 @@ TasksMapper tasksMapper;
 
 
     }
+
     @Test
-    public void testSelect(){
-        List<Tasks>tasksList=tasksService.selectByImportance(1);
+    public void test() {
 
-        for(Tasks tasks:tasksList){
 
-            System.out.println(tasks.toString());
-        }
+        Claims claims = Jwts.parser().setSigningKey("cjt666").parseClaimsJws("eyJhbGciOiJIUzI1NiJ9.eyJuYW1lIjoi57OW55qE5b6IIiwiaWQiOjEsInVzZXJuYW1lIjoiY2p0NjY2IiwiZXhwIjo0NDkwMzczNDgxNX0.0qn_I1fonOhBRB-M9LvN55RF2SyxVu3pbStv3ZK3Hx0").getBody();
+
+        // 从JWT令牌中提取用户ID
+        Integer userId = claims.get("id", Integer.class);
+
+        Tasks task = new Tasks();
+
+        task.setIsDelete(0);
+        task.setUserId(userId);
+        task.setCreateTime(LocalDateTime.now());
+        task.setName("dfsdgs");
+
+
+        tasksMapper.insert(task);
 
 
     }
-    @Test
-    public void testSearch(){
-        List<Tasks>tasksList=tasksService.tbSelectByNameLike("j",2);
-
-
-        for (Tasks tasks:tasksList){
-            System.out.println(tasks.toString());
-        }
-
-    }
-
-
-
-    @Test
-    public void testGetByDate(){
-
-
-        System.out.println( tasksService.getCountOnTime("2023-11-17",1)/tasksService.getCountByDate("2023-11-17",1));;
-
-
-
-
-
-
-    }
-
-
-
 
 }

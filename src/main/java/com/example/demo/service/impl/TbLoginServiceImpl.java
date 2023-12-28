@@ -28,7 +28,7 @@ TbLoginMapper tbLoginMapper;
     public TbLogin getByPasswordAndUserName(@Param("username") String username, @Param("password") String password){
 
         QueryWrapper<TbLogin> wrapper = new QueryWrapper<TbLogin>()
-                .select("id","username","password","create_time","gender","image")
+                .select("id","username","name","password","create_time","gender","image")
                 .eq("username", username).eq("password",password);
 
         return tbLoginMapper.selectOne(wrapper);

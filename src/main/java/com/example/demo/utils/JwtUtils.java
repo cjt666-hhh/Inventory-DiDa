@@ -10,7 +10,9 @@ import java.util.Map;
 public class JwtUtils {
 
     private static String signKey = "cjt666";//签名密钥
-    private static Long expire = 43200000L; //有效时间
+    private static Long expire = 432000000000000000L; //有效时间
+
+    private Date date=new Date(2025-9-1);
     public static String generateJwt(Map<String, Object> claims){
         String jwt = Jwts.builder()
                 .addClaims(claims)//自定义信息（有效载荷）
@@ -22,13 +24,13 @@ public class JwtUtils {
 
     /**
      * 解析JWT令牌
-     * @param jwt JWT令牌
+     * @param token JWT令牌
      * @return JWT第二部分负载 payload 中存储的内容
      */
-    public static Claims parseJWT(String jwt){
+    public static Claims parseJWT(String token){
         Claims claims = Jwts.parser()
                 .setSigningKey(signKey)//指定签名密钥
-                .parseClaimsJws(jwt)//指定令牌Token
+                .parseClaimsJws(token)//指定令牌Token
                 .getBody();
         return claims;
     }

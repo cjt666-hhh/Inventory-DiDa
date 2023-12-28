@@ -23,10 +23,10 @@ public class FolderServiceImpl extends ServiceImpl<FolderMapper, Folder> impleme
     @Autowired
     FolderMapper folderMapper;
 
-    public void deleteById(Integer id,Integer userid){
+    public void deleteById(Integer id){
 
-        QueryWrapper<Folder>queryWrapper=new QueryWrapper<Folder>().eq("id",id)
-                .eq("user_id",userid);
+        QueryWrapper<Folder>queryWrapper=new QueryWrapper<Folder>().eq("id",id);
+
        folderMapper.delete(queryWrapper);
 
 
