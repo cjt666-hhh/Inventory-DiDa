@@ -2,12 +2,10 @@ package com.example.demo.controller;
 
 import com.example.demo.entity.TbLogin;
 import com.example.demo.pojo.Result;
-import com.example.demo.pojo.Resultt;
 import com.example.demo.service.impl.TbLoginServiceImpl;
 import com.example.demo.utils.JwtUtils;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -27,7 +25,7 @@ public class LoginController {
 
     @ApiOperation("登录账号")
     @GetMapping("/userLogin/{username}/{password}")
-    public Result login(@PathVariable("username")String username,@PathVariable("password")String password,HttpSession session){
+    public Result login(@PathVariable("username")String username,@PathVariable("password")String password){
         TbLogin user=tbLoginService.getByPasswordAndUserName(username,password);
         //判断：登录用户是否存在
         if(user !=null ){
@@ -36,7 +34,7 @@ public class LoginController {
             claims.put("id", user.getId());
             claims.put("username",user.getUsername());
             claims.put("name",user.getName());
-            session.setAttribute("user",user.getUsername());
+
 //使用JWT工具类，生成身份令牌
             String token = JwtUtils.generateJwt(claims);
             return Result.success(token);
@@ -62,7 +60,6 @@ public class LoginController {
     }
 
 //    public String getUserName(HttpSession session)
-
 
 
 

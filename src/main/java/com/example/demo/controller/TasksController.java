@@ -154,7 +154,7 @@ public class TasksController {
         Integer userId = claims.get("id", Integer.class);
         return Result.success(tasksService.getCountOnTime(date,userId));
     }
-    @ApiOperation("前端把日期发过来，我给前端近7天按时完成的待办的数量")
+    @ApiOperation("前端把日期发过来，我给前端近7天按时完成的待办的数量")//echart
     @GetMapping("/getSevenDays/{day}")
     public Result getSevenDays(@PathVariable("day")String day,ServletRequest servletRequest){
         HttpServletRequest request = (HttpServletRequest) servletRequest;

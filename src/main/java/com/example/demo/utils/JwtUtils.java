@@ -12,7 +12,7 @@ public class JwtUtils {
     private static String signKey = "cjt666";//签名密钥
     private static Long expire = 432000000000000000L; //有效时间
 
-    private Date date=new Date(2025-9-1);
+
     public static String generateJwt(Map<String, Object> claims){
         String jwt = Jwts.builder()
                 .addClaims(claims)//自定义信息（有效载荷）
